@@ -7,9 +7,9 @@ import static java.lang.Math.sqrt;
 public class Lab2{
 	public static void main(String[] args){
 		Point3d dot_1 = new Point3d();
-		Point3d dot_2 = new Point3d(1, 2, 3);
-		Point3d dot_3 = new Point3d(1, 1, 1);
-		Point3d dot_4 = new Point3d(20, 1.5, 13);
+		Point3d dot_2 = new Point3d(1, 1, 1);
+		Point3d dot_3 = new Point3d(1, 2, 3);
+		Point3d dot_4 = new Point3d(4, 4, 4);
 
 		System.out.println(computeArea(dot_1, dot_2, dot_3));
 		System.out.println(computeArea(dot_1, dot_2, dot_4));

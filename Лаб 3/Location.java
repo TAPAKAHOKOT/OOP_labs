@@ -23,4 +23,19 @@ public class Location
     {
         this(0, 0);
     }
+
+    public boolean equals(Location loc){
+        if (this == loc)
+            return true;
+        else if (loc == null)
+            return false;
+        else{
+            return xCoord == loc.xCoord && yCoord == loc.yCoord;
+        }
+    }
+
+    public int hashCode(){
+        final int prime = 31;
+        return (prime + xCoord ) * prime + yCoord;
+    }
 }
