@@ -7,12 +7,8 @@ import java.awt.Color;
 public class JImageDisplay extends JComponent{
 	private BufferedImage bimage;
 
-	public static void main(String[] args){
-
-	}
-
-	public JImageDisplay(int w, int h, int iType){
-		bimage = new BufferedImage(w, h, iType);
+	public JImageDisplay(int w, int h){
+		bimage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 		super.setPreferredSize(new Dimension(w, h));
 	}
 
@@ -26,14 +22,16 @@ public class JImageDisplay extends JComponent{
 	public void clearImage(){
 		for (int i = 0; i < bimage.getWidth(); i++) {
 			for (int j = 0; j < bimage.getHeight(); j++) {
-				bimage.setRGB(i, j, new Color(0, 0, 0, 255).getRGB());
+				bimage.setRGB(i, j, new Color(0, 0, 0, 0).getRGB());
 			}
 		}
+
+		this.repaint();
 	}
 
 	// Раскрашиваме определенный пиксель
 	public void drawPixel(int x, int y, int rgbColor){
-		// bimage.setRGB(x, y, new Color(0, 0, 0, 255).getRGB());
+		bimage.setRGB(x, y, rgbColor);
 	}
 
 	// Вычисления фрактала Мандельброта...
