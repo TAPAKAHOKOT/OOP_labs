@@ -14,6 +14,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.SwingUtilities;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -37,6 +38,9 @@ public class FractalExplorer{
 	private  JFileChooser fileChooser;
 	private JButton savingingButton;
 
+	private int rowsRemaining;
+	private JFrame frame;
+
 	public FractalExplorer(int winSize){
 		this.winSize = winSize;
 		this.range = new Rectangle2D.Double();
@@ -49,7 +53,7 @@ public class FractalExplorer{
 	public void createAndShowGUI(){
 		// JFrame init
 		
-		JFrame frame = new JFrame("Pathfinder");
+		frame = new JFrame("Pathfinder");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		Container contentPane = frame.getContentPane();
@@ -110,26 +114,22 @@ public class FractalExplorer{
 	}
 
 	private void drawFractal(){
-		double xCoord, yCoord;
+		double yCoord;
 		float hue;
 		int iters, rgbColor;
+		FractalWorker worker;
 
-		for (int x = 0; x < winSize; x++){
-			for (int y = 0; y < winSize; y++){
-				xCoord = generator.getCoord(range.x, range.x + range.width, winSize, x);
-				yCoord = generator.getCoord(range.y, range.y + range.height, winSize, y);
+		rowsRemaining = winSize;
+		enableGUI(false);
 
-				iters = generator.numIterations(xCoord, yCoord);
-
-				hue = 0.7f + (float)iters / 200f;
-				rgbColor = iters == -1 ? 0 : Color.HSBtoRGB(hue, 1f, 1f);
-
-				display.drawPixel(x, y, rgbColor);
-			}
+		for (int y = 0; y < winSize; y++){
+			worker = new FractalWorker(y);
+			worker.execute();
 		}
+	}
 
-		display.repaint();
-
+	public void enableGUI(boolean val){
+		frame.setEnabled(val);
 	}
 
 	public static void main(String[] args) {
@@ -170,17 +170,63 @@ public class FractalExplorer{
 
 	public class MListener extends MouseAdapter{
 		public void mouseClicked(MouseEvent e){
-			double x = e.getPoint().getX();
-			double y = e.getPoint().getY();
+			if (rowsRemaining == 0){
+				double x = e.getPoint().getX();
+				double y = e.getPoint().getY();
 
-			coordsLabel.setText("Coordinates:  x -> " + x + "   y - >" + y);
+				coordsLabel.setText("Coordinates:  x -> " + x + "   y - >" + y);
 
-			x = generator.getCoord(range.x, range.x + range.width, winSize, (int)x);
-			y = generator.getCoord(range.y, range.y + range.height, winSize, (int)y);
+				x = generator.getCoord(range.x, range.x + range.width, winSize, (int)x);
+				y = generator.getCoord(range.y, range.y + range.height, winSize, (int)y);
 
-			generator.recenterAndZoomRange(range, x, y, 0.5);
-			drawFractal();
-			display.repaint();
+				generator.recenterAndZoomRange(range, x, y, 0.5);
+				drawFractal();
+				display.repaint();
+			}
+		}
+	}
+
+	private class FractalWorker extends SwingWorker<Object, Object>{
+		private int y;
+		private int[] x_arr;
+
+		public FractalWorker(int y){
+			this.y = y;
+		}
+
+		public Object doInBackground(){
+			x_arr = new int[winSize];
+
+			double xCoord, yCoord;
+			float hue;
+			int iters, rgbColor;
+
+
+			for (int x = 0; x < winSize; x++){
+				xCoord = generator.getCoord(range.x, range.x + range.width, winSize, x);
+				yCoord = generator.getCoord(range.y, range.y + range.height, winSize, y);
+
+				iters = generator.numIterations(xCoord, yCoord);
+
+				hue = 0.7f + (float)iters / 200f;
+				rgbColor = iters == -1 ? 0 : Color.HSBtoRGB(hue, 1f, 1f);
+
+				x_arr[x] = rgbColor;
+			}
+
+			return null;
+		}
+
+		public void done(){
+			for (int x = 0; x < winSize; x++){
+				display.drawPixel(x, y, x_arr[x]);
+			}
+
+			display.repaint(0, 0, y, winSize, 1);
+			rowsRemaining--;
+
+			if (rowsRemaining == 0)
+				enableGUI(true);
 		}
 	}
 }
