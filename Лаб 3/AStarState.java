@@ -81,9 +81,11 @@ public class AStarState
         if (topExist){
             if (newWP.getPreviousCost() < openTop.get(oLoc).getPreviousCost()){
                 openTop.put(newWP.loc, newWP);
+                return true;
             }
         } else{
             openTop.put(newWP.loc, newWP);
+            return true;
         }
 
         return false;
