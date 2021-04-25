@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 public class FindAllHrefs implements Runnable{
 	private LinkedList<URLDepthPair> list = new LinkedList<URLDepthPair>();
-	private LinkedList<Integer> listURLS = new LinkedList<Integer>();
 	private int maxDepth;
 	private URLDepthPair mainPair;
 
@@ -36,8 +35,9 @@ public class FindAllHrefs implements Runnable{
 				if (!linkUrl.equals("")){
 					// System.out.println(linkUrl);
 					cPair = new URLDepthPair(linkUrl, pair.getDepth() + 1);
-					if (!ThreadList.listURLS.contains(cPair.getUrl().hashCode())){
-						ThreadList.listURLS.add(cPair.getUrl().hashCode());
+					int pairHash = cPair.getUrl().hashCode(); 
+					if (!ThreadList.listURLS.contains(pairHash)){
+						ThreadList.listURLS.add(pairHash);
 						list.add(cPair);
 						this.saveToListAllLinkes(cPair);
 					}
@@ -78,7 +78,7 @@ public class FindAllHrefs implements Runnable{
 		FindAllHrefs finder = new FindAllHrefs(1, mainPair);
 
 		finder.saveToListAllLinkes(mainPair);
-		finder.printList();
+		// finder.printList();
 		// finder и thread массивы
 		var finderArr = new FindAllHrefs[finder.getListSize() - 1];
 		var threads = new Thread[finder.getListSize() - 1];
