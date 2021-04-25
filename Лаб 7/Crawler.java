@@ -9,10 +9,10 @@ public class Crawler{
 
 	public void start(URLDepthPair mainPair){
 		try {
-			System.out.println("(" + mainPair.getAfterMainURLPage() + ") (" + mainPair.getMainURLPage() + ")");
+			// System.out.println("(" + mainPair.getAfterMainURLPage() + ") (" + mainPair.getMainURLPage() + ")");
 
 			socket = new Socket();
-			socket.setSoTimeout(1000);
+			socket.setSoTimeout(300);
 			socket.connect(new InetSocketAddress(mainPair.getMainURLPage(), 80), 500);
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
@@ -23,10 +23,10 @@ public class Crawler{
             out.println("User-Agent: Java");
             out.println("");
             out.flush();
-			System.out.println("\n\n<<< Socket is running >>>");
+			// System.out.println("\n\n<<< Socket is running >>>");
 
 		} catch (Exception e){
-			System.out.println(e);
+			// System.out.println(e);
 		}
 	}
 
@@ -79,7 +79,7 @@ public class Crawler{
 			in.close();
 			out.close();
 			socket.close();
-			System.out.println("<<< Socket is closed >>>\n\n");
+			// System.out.println("<<< Socket is closed >>>\n\n");
 		}
 		catch (Exception e){
 			// System.out.println(e);
@@ -87,6 +87,6 @@ public class Crawler{
 	}
 
 	public Crawler(){
-		System.out.println("Created");
+		// System.out.println("Created");
 	}
 }
