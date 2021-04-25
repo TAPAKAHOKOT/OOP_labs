@@ -48,7 +48,7 @@ public class FractalExplorer{
 		frame.add(coordsLabel, BorderLayout.PAGE_START);
 
 		frame.add(display, BorderLayout.CENTER);
-
+		
 		ActionListener aListener = new AListener();
 
 		JButton droppingButton = new JButton("Drop images");
