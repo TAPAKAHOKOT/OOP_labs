@@ -6,13 +6,14 @@ public class Crawler{
 	private BufferedReader in;
 	private PrintWriter out;
 	private boolean inReadLineAvailable = true;
+	private URLDepthPair mainPair;
 
 	public void start(URLDepthPair mainPair){
 		try {
 			// System.out.println("(" + mainPair.getAfterMainURLPage() + ") (" + mainPair.getMainURLPage() + ")");
-
+			this.mainPair = mainPair;
 			socket = new Socket();
-			socket.setSoTimeout(300);
+			socket.setSoTimeout(500);
 			socket.connect(new InetSocketAddress(mainPair.getMainURLPage(), 80), 500);
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
@@ -59,6 +60,8 @@ public class Crawler{
 		if (res.startsWith("http://"))
 			return res.substring(7);
 		else
+			if (res.startsWith("/"))
+				return this.mainPair.getMainURLPage() + res;
 			return "";
 	}
 

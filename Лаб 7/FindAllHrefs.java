@@ -62,17 +62,17 @@ public class FindAllHrefs implements Runnable{
 	}
 
 	public static void main(String[] args){
-		Scanner scanner = new Scanner(System.in);
+		// Scanner scanner = new Scanner(System.in);
 
-		System.out.println("Enter URL-adress: ");
-		String url = scanner.nextLine();
+		// System.out.println("Enter URL-adress: ");
+		// String url = scanner.nextLine();
 
-		System.out.println("Enter scanner depth: ");
-		int depth = scanner.nextInt();
-		depth = depth < 1 ? 1 : depth;
+		// System.out.println("Enter scanner depth: ");
+		// int depth = scanner.nextInt();
+		// depth = depth < 1 ? 1 : depth;
 
-		// int depth = 5;
-		// String url = ThreadList.urlsList[1];
+		int depth = 5;
+		String url = ThreadList.urlsList[1];
 
 		URLDepthPair mainPair = new URLDepthPair(url, 0);
 		FindAllHrefs finder = new FindAllHrefs(1, mainPair);
